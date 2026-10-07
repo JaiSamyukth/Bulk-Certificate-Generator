@@ -2,6 +2,10 @@ import os
 from pathlib import Path
 from typing import Generator
 
+# Override settings for tests BEFORE importing app modules
+os.environ["CERTGEN_WORKER_MODE"] = "inline"
+os.environ["CERTGEN_DATABASE_URL"] = "sqlite:///:memory:"
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import StaticPool, create_engine
@@ -11,9 +15,6 @@ from app.config import get_settings
 from app.database import Base
 from app.main import app, get_db
 
-# Override settings for tests
-os.environ["CERTGEN_WORKER_MODE"] = "inline"
-os.environ["CERTGEN_DATABASE_URL"] = "sqlite:///:memory:"
 
 # Setup test database
 engine = create_engine(
